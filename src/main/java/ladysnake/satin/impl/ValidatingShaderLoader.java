@@ -18,6 +18,7 @@
 package ladysnake.satin.impl;
 
 import com.mojang.blaze3d.platform.GlStateManager;
+import io.github.pixee.security.BoundedLineReader;
 import ladysnake.satin.Satin;
 import ladysnake.satin.api.util.ShaderLinkException;
 import ladysnake.satin.api.util.ShaderLoader;
@@ -119,7 +120,7 @@ public final class ValidatingShaderLoader implements ShaderLoader {
         try (InputStream in = resourceManager.getResourceOrThrow(fileLocation).getInputStream();
              BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8))) {
             String line;
-            while ((line = reader.readLine()) != null) {
+            while ((line = BoundedLineReader.readLine(reader, 5_000_000)) != null) {
                 source.append(line).append('\n');
             }
         }
